@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="xf_mic_asr_offline" type="call_recognition" name="call_recognition" />
+</launch>

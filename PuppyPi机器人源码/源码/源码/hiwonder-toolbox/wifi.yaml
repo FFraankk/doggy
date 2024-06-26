@@ -1,0 +1,11 @@
+#mode: "client"
+#ap_mode:
+#  ssid: "ssid_name"
+#  band: 5
+#  channel: 149
+#  password: "password"
+#  gateway: "192.168.149.1"
+#client_mode:
+#  ssid: "ssid_name"
+#  password: "password"
+#  timeout: 30

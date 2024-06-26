@@ -1,0 +1,13 @@
+﻿#BNF+IAT 1.0 UTF-8;
+!grammar call;
+
+
+!start <callstart>;
+!slot <do>;
+!slot <something>;
+
+
+<callstart>:<do><something>|<something>;
+<do>:(来|来个|做个|表演|表演个|表演一个);
+<something>:(立正|站立|站好|坐下|趴下|双腿站立|握手|握个手|作揖|点头|点个头|摇头|拳击|伸懒腰|撒尿|撒个尿|嘘嘘|俯卧撑|太空漫步|太空步|原地踏步|匍匐前进|波浪);
+

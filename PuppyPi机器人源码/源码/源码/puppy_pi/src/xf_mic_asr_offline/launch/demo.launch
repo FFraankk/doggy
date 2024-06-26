@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find xf_mic_asr_offline)/launch/mic_init.launch" />
+
+	<include file="$(find xf_mic_asr_offline)/launch/call_recognition.launch" />
+
+    <node pkg="xf_mic_asr_offline" type="get_result.py" name="xf_mic_asr_offline_get_result" />
+</launch>

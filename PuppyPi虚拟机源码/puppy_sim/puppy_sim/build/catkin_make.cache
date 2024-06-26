@@ -1,0 +1,2 @@
+puppy_description
+-DCATKIN_DEVEL_PREFIX=/home/puppy/puppy_sim/devel -DCMAKE_INSTALL_PREFIX=/home/puppy/puppy_sim/install -G Unix Makefiles
