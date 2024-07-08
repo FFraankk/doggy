@@ -53,28 +53,32 @@ if __name__ == '__main__':
 
     rospy.init_node(ROS_NODE_NAME, log_level=rospy.INFO)
     rospy.on_shutdown(cleanup)
-    
+    rospy.loginfo("2")
     PuppyPosePub = rospy.Publisher('/puppy_control/pose', Pose, queue_size=1)
     PuppyGaitConfigPub = rospy.Publisher('/puppy_control/gait', Gait, queue_size=1)
     PuppyVelocityPub = rospy.Publisher('/puppy_control/velocity', Velocity, queue_size=1)
-
+    rospy.loginfo("3")
     set_mark_time_srv = rospy.ServiceProxy('/puppy_control/set_mark_time', SetBool)
     # 原地踏步服务
-
+    rospy.loginfo("4")
     rospy.sleep(0.2)
+    rospy.loginfo("4.5")
     PuppyPosePub.publish(stance_x=PuppyPose['stance_x'], stance_y=PuppyPose['stance_y'], x_shift=PuppyPose['x_shift']
             ,height=PuppyPose['height'], roll=PuppyPose['roll'], pitch=PuppyPose['pitch'], yaw=PuppyPose['yaw'], run_time = 500)
     
+    rospy.loginfo("5")
     rospy.sleep(0.2)
+    rospy.loginfo("5.5")
     PuppyGaitConfigPub.publish(overlap_time = GaitConfig['overlap_time'], swing_time = GaitConfig['swing_time']
                     , clearance_time = GaitConfig['clearance_time'], z_clearance = GaitConfig['z_clearance'])
+    rospy.loginfo("6")
     rospy.sleep(0.2)
-
+    rospy.loginfo("6.5")
     PuppyVelocityPub.publish(x=PuppyMove['x'], y=PuppyMove['y'], yaw_rate=PuppyMove['yaw_rate'])
-
+    rospy.loginfo("6.8")
     set_mark_time_srv(False)
     ## 如果原地踏步期间，小狗仍然在缓慢的向前或向后，那就需要重新调整小狗重心，微调PuppyPose['x_shift']即可
-
+    rospy.loginfo("7")
 
     while True:
         try:
@@ -83,4 +87,10 @@ if __name__ == '__main__':
                 sys.exit(0)
         except :
             sys.exit(0)
-
+    # rospy.loginfo("8")
+    # try:
+    #     set_mark_time_srv(False)
+    #     rospy.loginfo("9")
+    # except rospy.ServiceException as e:
+    #     rospy.logerr("Service call failed: %s"%e)
+    #     rospy.loginfo("10")
