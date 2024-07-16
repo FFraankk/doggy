@@ -128,9 +128,10 @@ class PUPPY():
         rospy.init_node(ROS_NODE_NAME, log_level=rospy.INFO)#DEBUG INFO
         self.joint_state_pub_topic = rospy.get_param('~joint_state_pub_topic' ,'false')
         self.joint_state_controller_pub_topic = rospy.get_param('~joint_state_controller_pub_topic' ,'false')
+        # 。和后面get——param一样的意思
         self.puppy = HiwonderPuppy(setServoPulse = setServoPulse, servoParams = PWMServoParams(),dof='8')
         self.mpu = MPU6050()
-        self.puppy.imu = None#self.mpu
+        self.puppy.imu = None #self.mpu
         
 
         self.puppy.stance_config(self.stance(PuppyPose['stance_x'],PuppyPose['stance_y'],PuppyPose['height'],PuppyPose['x_shift']), PuppyPose['pitch'], PuppyPose['roll'])
@@ -165,8 +166,13 @@ class PUPPY():
         # self.legs_servo_value_pub = rospy.Publisher('/%s/legs_servo_value' %ROS_NODE_NAME, Float32MultiArray, queue_size=1)
 
         self.joint_state = JointState()
+        # 。这是一种消息格式，是在sensor_msgs下的
         self.joint_state_pub = rospy.Publisher('/joint_states', JointState, queue_size=1)
+        # 。这里定义了一个发布者，消息格式是JointState
         self.joint_state.name = ['rf_joint1', 'lf_joint1', 'rb_joint1', 'lb_joint1', 'rf_joint2', 'lf_joint2', 'rb_joint2', 'lb_joint2']
+        # 。讲清除joint的name并且让列表变成7个
+       
+       
         command_topics = ["/puppy/joint1_position_controller/command",
                           "/puppy/joint2_position_controller/command",
                           "/puppy/joint3_position_controller/command",
@@ -175,11 +181,10 @@ class PUPPY():
                           "/puppy/joint6_position_controller/command",
                           "/puppy/joint7_position_controller/command",
                           "/puppy/joint8_position_controller/command"]
-
         self.joint_controller_publishers = []
         for i in range(len(command_topics)):
             self.joint_controller_publishers.append(rospy.Publisher(command_topics[i], Float64, queue_size=10))
-
+        # 。像堆积木一样一步一步最后产生了我们需要的joint_controller_publishers这个列表，这里面是8个发布者，用来发布每个舵机的位置信息
 
         self.rate = rospy.Rate(100)  # 100hz
         
@@ -364,17 +369,19 @@ class PUPPY():
                 rospy.sleep(0.002)
                 self.joint_state_pub_topic = rospy.get_param('~joint_state_pub_topic' ,'false')
                 self.joint_state_controller_pub_topic = rospy.get_param('~joint_state_controller_pub_topic' ,'false')
-            
+                # 。每100个时间戳触发一次，向/%s/legs_coord发送（。。。）信息，同时检查参数服务器是不是还活着，活着的话就是照常，如果get不到参数，那两个全部变成false，后面也就不发消息了
             times += 1
 
             # print('coord',coord)
             # print(msg)
             
-            if self.joint_state_pub_topic or self.joint_state_controller_pub_topic:
+            if self.joint_state_pub_topic or self.joint_state_controller_pub_topic:# 。正常启动的时候这里一般是后者为true前者为false，默认启动参数见start_puppy_control.launch
                 joint_angles = self.puppy.fourLegsRelativeCoordControl(coord/100)
                 data = sum([list(joint_angles[1,:]),list(joint_angles[2,:])],[])
                 # joint_angles *= 57.3
                 self.joint_state.header.stamp = rospy.Time.now()
+                # 。每个joint_state的header的时间戳在同一个joint里应该是一样的
+                # 。讲清除joint的header
                 for i in range(len(data)):
                     if i > 3:
                         data[i] = 0.0695044662*data[i]**3 - 0.0249173454*data[i]**2 - 0.786456081*data[i] + 1.5443387652 - 3.1415926/2 #-data[i]
@@ -383,6 +390,7 @@ class PUPPY():
                 if self.joint_state_pub_topic:
                     self.joint_state.position = data 
                     self.joint_state_pub.publish(self.joint_state)
+                # 。把消息发布到/joint_states里，格式是Jointstate
                 
                 # for i in range(len(data)):
                 #     if i > 3:
