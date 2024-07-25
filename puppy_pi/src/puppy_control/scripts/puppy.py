@@ -59,8 +59,6 @@ GaitConfigMarkTime = {'overlap_time':0.2, 'swing_time':0.1, 'clearance_time':0.0
 # GaitConfigMarkTime = {'overlap_time':0.2, 'swing_time':0.1, 'clearance_time':0.0, 'z_clearance':4}
 # GaitConfigCrawl = {'overlap_time':0.4, 'swing_time':0.3, 'clearance_time':0.20, 'z_clearance':4}
 GaitConfig = GaitConfigFast.copy()
-
-
 # overlap_time:4脚全部着地的时间，单位秒
 # swing_time：单脚离地时间，单位秒
 # clearance_time：前后交叉脚相位间隔时间，单位秒
@@ -325,6 +323,7 @@ class PUPPY():
     def PoseFun(self, msg):
         global PuppyPose
         rospy.logdebug(msg)
+        
         # return
         if (abs(msg.roll) <= np.radians(31) and abs(msg.pitch) <= np.radians(31) 
                 and abs(msg.yaw) == 0 and msg.height >= -15 and msg.height <= -5
