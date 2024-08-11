@@ -58,6 +58,9 @@ def go_home():
     buzzer_pub.publish(0.005)
     rospy.loginfo(PuppyPose)
 
+def creep():
+    rospy.ServiceProxy('creep',Empty)()
+    
 
 def LegsCoordFun(msg):
     global LegsCoord
@@ -165,6 +168,7 @@ def ReleaseFun(*args,**kwargs):
 
 PRESSED_ACTION_MAP = {
     "START": go_home,
+    "MODE":creep,
     "SELECT": partial(PressedFun, 0, key = 'legs_coord'),
 
     "L_HAT_UP": partial(PressedFun, 1, key = 'x'),
